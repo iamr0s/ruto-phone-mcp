@@ -6,12 +6,27 @@ Ruto Phone MCP is a phone automation toolkit for Android devices.
 
 It can run on the phone itself, or on any other machine that can reach the phone through `adb`. With a vision-capable model, it can observe screenshots, operate the device, and complete multi-step tasks. It can also expose the same capabilities as an MCP server, so tools such as OpenClaw and PicoClaw can control the phone indirectly.
 
+QQ Group: [Join the group](https://qm.qq.com/cgi-bin/qm/qr?k=cX461O2DhAyGuaaSKdh-9aVPKhW8RpKv&jump_from=webapi&qr=1). You can also share your own app operating manuals and `SKILL.md` instructions there.
+
+Discussions: [GitHub Discussions](https://github.com/iamr0s/ruto-phone-mcp/discussions)
+
 ## What It Can Do
 
 - Control an Android device through touch, swipe, back, home, launch-app, and app inspection tools.
 - Run an interactive agent from the command line with screenshots and tool callbacks.
 - Expose the phone controller and the task-running agent through MCP.
 - Load local `SKILL.md` files so the model can follow product-specific operating instructions.
+
+## TODO
+
+- Add a web UI for phone control, task execution, and session inspection.
+- Make configuration easier to edit and validate.
+- Add built-in skill management for install, update, enable, disable, and uninstall flows.
+- Support more notification channels for task progress and completion events.
+
+## Contributing
+
+My time is limited and work is busy, so progress on the project will not always be fast. If you find this project useful, you are welcome to join development, improve documentation, contribute skills, and help make the whole system more complete.
 
 ## Deployment Model
 
