@@ -27,10 +27,8 @@ LOGGER = logging.getLogger("ruto_phone_mcp")
 class ServerConfig:
     host: str = "127.0.0.1"
     port: int = 8000
-    transport: Literal["stdio", "sse", "streamable-http"] = "streamable-http"
+    transport: Literal["stdio", "http", "streamable-http"] = "streamable-http"
     mount_path: str = "/"
-    sse_path: str = "/sse"
-    message_path: str = "/messages/"
     streamable_http_path: str = "/mcp"
     log_level: str = "DEBUG"
     debug: bool = True
@@ -49,7 +47,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "-t",
         "--transport",
-        choices=["stdio", "sse", "streamable-http"],
+        choices=["stdio", "http", "streamable-http"],
         help="Override the configured transport for this run.",
     )
     return parser
@@ -94,12 +92,10 @@ def load_config(config_arg: str) -> ServerConfig:
     host = str(raw.get("host", "127.0.0.1"))
     port = int(raw.get("port", 8000))
     transport = str(raw.get("transport", "streamable-http")).strip().lower() or "streamable-http"
-    if transport not in {"stdio", "sse", "streamable-http"}:
+    if transport not in {"stdio", "http", "streamable-http"}:
         raise ValueError(f"Unsupported transport: {transport}")
 
     mount_path = str(raw.get("mount_path", "/"))
-    sse_path = str(raw.get("sse_path", "/sse"))
-    message_path = str(raw.get("message_path", "/messages/"))
     streamable_http_path = str(raw.get("streamable_http_path", "/mcp"))
     log_level = str(raw.get("log_level", "DEBUG")).upper()
     debug = bool(raw.get("debug", True))
@@ -118,8 +114,6 @@ def load_config(config_arg: str) -> ServerConfig:
         port=port,
         transport=transport,
         mount_path=mount_path,
-        sse_path=sse_path,
-        message_path=message_path,
         streamable_http_path=streamable_http_path,
         log_level=log_level,
         debug=debug,
@@ -152,8 +146,6 @@ def create_server(config: ServerConfig) -> FastMCP:
         host=config.host,
         port=config.port,
         mount_path=config.mount_path,
-        sse_path=config.sse_path,
-        message_path=config.message_path,
         streamable_http_path=config.streamable_http_path,
         log_level=config.log_level,
         debug=config.debug,
@@ -165,7 +157,7 @@ def create_server(config: ServerConfig) -> FastMCP:
         LOGGER.debug("hello tool called with name=%s", name)
         return f"Hello, {name}!"
 
-    @mcp.tool(description="Emit 4 random characters over SSE-style progress/log events, then return the combined string.")
+    @mcp.tool(description="Emit 4 random characters over progress/log events, then return the combined string.")
     async def test(ctx: Context) -> str:
         """Stream 4 random characters through progress/log notifications and return the final text."""
         chars: list[str] = []
@@ -180,7 +172,7 @@ def create_server(config: ServerConfig) -> FastMCP:
         await ctx.info(f"random_char_done: {result}")
         return result
 
-    @mcp.tool(description="Run the phone agent until it finishes the requested task. Stream intermediate assistant and tool events over SSE/log notifications, then return the final answer.")
+    @mcp.tool(description="Run the phone agent until it finishes the requested task. Stream intermediate assistant and tool events over progress/log notifications, then return the final answer.")
     async def task(prompt: str, ctx: Context) -> str:
         """Run the phone agent to completion for a single task request."""
         event_queue: asyncio.Queue[dict[str, Any]] = asyncio.Queue()
@@ -232,13 +224,11 @@ def main() -> None:
         config.transport = args.transport
     setup_logging(config.log_level)
     LOGGER.info(
-        "starting server host=%s port=%s transport=%s mount_path=%s sse_path=%s message_path=%s streamable_http_path=%s agent_config=%s log_level=%s debug=%s",
+        "starting server host=%s port=%s transport=%s mount_path=%s streamable_http_path=%s agent_config=%s log_level=%s debug=%s",
         config.host,
         config.port,
         config.transport,
         config.mount_path,
-        config.sse_path,
-        config.message_path,
         config.streamable_http_path,
         config.agent_config_path,
         config.log_level,

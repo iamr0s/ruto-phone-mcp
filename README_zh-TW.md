@@ -95,10 +95,8 @@ config/
 
 - `host`
 - `port`
-- `transport`：`stdio`、`sse` 或 `streamable-http`
+- `transport`：`stdio`、`http` 或 `streamable-http`
 - `mount_path`
-- `sse_path`
-- `message_path`
 - `streamable_http_path`
 - `agent_config`：Agent 設定檔路徑
 
@@ -140,7 +138,7 @@ python run_server.py
 
 ```bash
 python run_server.py --transport stdio
-python run_server.py --transport sse
+python run_server.py --transport http
 python run_server.py --transport streamable-http
 ```
 
@@ -178,7 +176,7 @@ python run_server.py --transport streamable-http
 python run_server.py --transport streamable-http
 ```
 
-如果你的客戶端真正支援 MCP 的 `sse` 流程，也可以使用 `sse`。否則請優先使用 `streamable-http`。
+如果你需要一般的 HTTP 傳輸，可使用 `http`。對於 MCP 客戶端，請優先使用 `streamable-http`。
 
 ## SKILLS
 

@@ -95,10 +95,8 @@ Main fields:
 
 - `host`
 - `port`
-- `transport`: `stdio`, `sse`, or `streamable-http`
+- `transport`: `stdio`, `http`, or `streamable-http`
 - `mount_path`
-- `sse_path`
-- `message_path`
 - `streamable_http_path`
 - `agent_config`: Path to the agent config file
 
@@ -140,7 +138,7 @@ Or select a transport explicitly:
 
 ```bash
 python run_server.py --transport stdio
-python run_server.py --transport sse
+python run_server.py --transport http
 python run_server.py --transport streamable-http
 ```
 
@@ -178,7 +176,7 @@ Then start the server with:
 python run_server.py --transport streamable-http
 ```
 
-If your client genuinely supports MCP `sse`, you can also use SSE. Otherwise prefer `streamable-http`.
+Use `http` if you need plain HTTP transport support. Otherwise prefer `streamable-http` for MCP clients.
 
 ## SKILLS
 

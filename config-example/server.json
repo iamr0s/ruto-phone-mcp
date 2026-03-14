@@ -3,8 +3,6 @@
   "port": 8000,
   "transport": "streamable-http",
   "mount_path": "/",
-  "sse_path": "/sse",
-  "message_path": "/messages/",
   "streamable_http_path": "/mcp",
   "agent_config": "agent.json",
   "log_level": "DEBUG",
